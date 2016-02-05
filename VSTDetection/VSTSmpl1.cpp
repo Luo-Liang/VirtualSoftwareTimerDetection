@@ -20,7 +20,7 @@ bool stop = false;
 #ifdef LINUX
 int64_t SharedTimer __attribute__((aligned(CacheLineSize))) = 0;
 #elif WINDOWS
-__declspec(align(CacheLineSize)) int64_t SharedTimer;
+__declspec(align(CacheLineSize)) int64_t SharedTimer = 0;
 #endif
 double cyclesPerIteration = 0;
 
@@ -52,12 +52,13 @@ void timingWork()
 	pinThreadToCore(4, GetCurrentThread());
 #endif
 	cout << "----- Collecting performance information for this device -----" << endl;
-	int64_t start = __rdtsc();
-	for (int64_t i = 0; i < MaxIteration; i++)
+	int64_t start, end;
+	start = __rdtsc();
+	while (SharedTimer < MaxIteration)
 	{
 		SharedTimer++;
 	}
-	int64_t end = __rdtsc();
+	end = __rdtsc();
 
 	cyclesPerIteration = 1.0*(end - start) / MaxIteration;
 
@@ -69,7 +70,7 @@ void timingWork()
 	lk.unlock();
 	cv.notify_one();
 	cout << " ----- Notification -----" << endl;
-	while (!stop)
+	while (SharedTimer < INT64_MAX)
 	{
 		SharedTimer++;
 	}
@@ -85,7 +86,7 @@ int main()
 #endif
 	thread timingThread(timingWork);
 	int64_t local = 0;
-	for (int64_t i = 0; i < MaxIteration; i++)
+	while (local < MaxIteration)
 	{
 		local = SharedTimer;
 	}
@@ -102,7 +103,7 @@ int main()
 		start = SharedTimer;
 		sweep(i);
 		end = SharedTimer;
-		//if (end > start)
+		if (end > start)
 		{
 			i++;
 			cycleAccumulator += (end - start);
