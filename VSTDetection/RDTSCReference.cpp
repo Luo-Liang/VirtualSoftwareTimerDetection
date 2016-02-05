@@ -12,7 +12,7 @@ void sweep(int64_t i)
 }
 
 
-int main()
+int __main()
 {
 	int64_t accumulator = 0;
 	//we do not want to waste time on seeking, although linear traversal is fast.
@@ -20,14 +20,14 @@ int main()
 	int64_t rdtscNoSeek = 0;
 	int64_t rdtscNoSeekEnd = 0;
 
-	for (int64_t i = 0; i < MaxIteration; i++)
+	for (int64_t i = 0; i < TestIteration; i++)
 	{
 		rdtscNoSeek = __rdtsc();
 		sweep(i);
 		accumulator += __rdtsc() - rdtscNoSeek;
 	}
 
-	cout << " ------ Average maximum accuracy " << accumulator*1.0 / MaxIteration << " ------" << endl;
+	cout << " ------ Average maximum accuracy " << accumulator*1.0 / TestIteration << " ------" << endl;
 	getchar();
 	return 0;
 }
