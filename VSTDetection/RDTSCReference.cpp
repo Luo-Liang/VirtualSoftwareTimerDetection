@@ -8,7 +8,7 @@ int64_t readerStub;
 
 void sweep(int64_t i)
 {
-	readerStub = cacheFiller[i % (CacheSizeInMB * 1024 * 1024 / 8)];
+	readerStub = cacheFiller[0];
 }
 
 

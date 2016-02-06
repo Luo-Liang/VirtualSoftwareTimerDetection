@@ -1,4 +1,4 @@
-#include <intrin.h>
+﻿#include <intrin.h>
 #include "SharedIncludes.h"
 #include <iostream>
 #include <thread>
@@ -85,11 +85,15 @@ int main()
 	pinThreadToCore(1, GetCurrentThread());
 #endif
 	thread timingThread(timingWork);
-	int64_t local = 0;
+	int64_t local = 0, local1 = 0, rdtscStart = 0, rdtscEnd = 0;
+	rdtscStart = __rdtsc();
 	while (local < MaxIteration)
 	{
 		local = SharedTimer;
+		local1 = SharedTimer;
 	}
+	rdtscEnd = __rdtsc();
+	int64_t iterationOverhead = (rdtscEnd - rdtscStart);
 	int64_t attempts = SharedTimer;
 	int64_t cycleAccumulator = 0;
 	int64_t i = 0, start, end;
@@ -110,7 +114,9 @@ int main()
 			//cout << i << endl;
 		}
 	}
-	cout << "----- Detected Accuracy " << (cycleAccumulator*1.0 / TestIteration)*cyclesPerIteration << endl;
+	double adjustedOverhead = 1.0 * iterationOverhead * TestIteration / MaxIteration;
+	cout << "----- Detected Accuracy " << ((cycleAccumulator - adjustedOverhead) / TestIteration)*cyclesPerIteration << endl;
+	cout << "----- Detected Overhead per iteration: " << 1.0 * iterationOverhead / MaxIteration << " -----" << endl;
 	stop = true;
 	timingThread.join();
 	getchar();
