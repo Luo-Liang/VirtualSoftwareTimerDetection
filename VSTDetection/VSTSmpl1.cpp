@@ -114,9 +114,25 @@ int main()
 			//cout << i << endl;
 		}
 	}
+	cout << "----- Detected Overhead per iteration: " << 1.0 * iterationOverhead / MaxIteration << " -----" << endl;
 	double adjustedOverhead = 1.0 * iterationOverhead * TestIteration / MaxIteration;
 	cout << "----- Detected Accuracy " << ((cycleAccumulator - adjustedOverhead) / TestIteration)*cyclesPerIteration << " -----" << endl;
-	cout << "----- Detected Overhead per iteration: " << 1.0 * iterationOverhead / MaxIteration << " -----" << endl;
+	i = 0;
+	cycleAccumulator = 0;
+	while (i < TestIteration)
+	{
+		fullSweep();
+		start = SharedTimer;
+		sweep(i);
+		end = SharedTimer;
+		if (end > start)
+		{
+			i++;
+			cycleAccumulator += (end - start);
+		}
+	}
+	adjustedOverhead = 1.0 * iterationOverhead * TestIteration / MaxIteration;
+	cout << "----- Detected Accuracy Miss " << ((cycleAccumulator - adjustedOverhead) / TestIteration)*cyclesPerIteration << " -----" << endl;
 	stop = true;
 	timingThread.join();
 	getchar();
