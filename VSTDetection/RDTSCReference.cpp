@@ -3,7 +3,11 @@
 #include <iostream>
 using namespace std;
 
-int64_t cacheFiller[CacheSizeInMB * 1024 * 1024 / 8];
+#ifdef LINUX
+int64_t cacheFiller[CacheSizeInMB * 1024 * 1024 / 8] __attribute__((aligned(CacheLineSize)));
+#elif WINDOWS
+__declspec(align(CacheLineSize)) int64_t cacheFiller[CacheSizeInMB * 1024 * 1024 / 8];
+#endif
 int64_t readerStub;
 
 void sweep(int64_t i)

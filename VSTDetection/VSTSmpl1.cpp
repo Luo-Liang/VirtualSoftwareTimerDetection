@@ -115,7 +115,7 @@ int main()
 		}
 	}
 	double adjustedOverhead = 1.0 * iterationOverhead * TestIteration / MaxIteration;
-	cout << "----- Detected Accuracy " << ((cycleAccumulator - adjustedOverhead) / TestIteration)*cyclesPerIteration << endl;
+	cout << "----- Detected Accuracy " << ((cycleAccumulator - adjustedOverhead) / TestIteration)*cyclesPerIteration << " -----" << endl;
 	cout << "----- Detected Overhead per iteration: " << 1.0 * iterationOverhead / MaxIteration << " -----" << endl;
 	stop = true;
 	timingThread.join();
