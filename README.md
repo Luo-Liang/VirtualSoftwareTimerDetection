@@ -3,4 +3,7 @@ Detects whether a program is doing VST maliciously with counter values.
 
 # The repo includes:
 # Workloads
+Malicious:
+   * RSA + probe thread
+Benign:
 # Source codes
