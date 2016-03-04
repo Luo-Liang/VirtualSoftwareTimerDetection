@@ -1,4 +1,8 @@
+#ifdef WINDOWS
 #include <intrin.h>
+#elif LINUX
+#include <x86intrin.h>
+#endif
 #include "SharedIncludes.h"
 #include <iostream>
 using namespace std;
