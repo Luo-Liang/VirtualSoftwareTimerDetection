@@ -4,3 +4,4 @@ aes_test
 hmac_test
 des_test
 workloads/parsec-3.0/*
+software_vt
