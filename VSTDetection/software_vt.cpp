@@ -127,7 +127,7 @@ int main()
         sigaction(SIGALRM, &sa, NULL);
 
         // Configure the timer to expire after 1 milliseconds
-        timer.it_value.tv_sec = 10;
+        timer.it_value.tv_sec = 20;
         timer.it_value.tv_usec = 0;
 
         // Configure the iterative timer
