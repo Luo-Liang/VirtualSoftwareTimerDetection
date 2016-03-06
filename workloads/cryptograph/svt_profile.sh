@@ -32,7 +32,7 @@ DTLB_STORE_MISSES.WALK_COMPLETED,\
 DTLB_STORE_MISSES.STLB_HIT,\
 ITLB_MISSES.WALK_COMPLETED,\
 ITLB_MISSES.STLB_HIT,\
--- ./rsa_test
+-- ./mix
 
 # Obtain the VTune report
 amplxe-cl -report Summary -format csv -csv-delimiter tab -report-output test.csv

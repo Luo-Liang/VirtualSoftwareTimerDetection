@@ -74,6 +74,7 @@ hmac_test
 rsa_test
 test.csv
 parsec-3.0
+mix
 
 # Chutzpah Test files
 _Chutzpah*

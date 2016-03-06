@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wextra
 LDLIBS=-lcrypto
-TARGETS=rsa_test aes_test hmac_test des_test
+TARGETS=rsa_test aes_test hmac_test des_test mix
 
 .PHONY:all
 all: $(TARGETS)
@@ -16,6 +16,9 @@ hmac_test: hmac_test.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 des_test: des_test.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+
+mix: mix.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 .PHONY:clean

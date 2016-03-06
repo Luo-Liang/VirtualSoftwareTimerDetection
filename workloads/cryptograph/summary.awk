@@ -2,7 +2,7 @@ BEGIN {
     ORS ="\t"
     cnt = 0;
     #print "Program\t";
-    print "rsa_test\t";
+    print "hr_test\t";
 }
 
 {
