@@ -67,6 +67,7 @@ artifacts/
 *.svclog
 *.scc
 r0*
+r1*
 software_vt
 aes_test
 des_test
