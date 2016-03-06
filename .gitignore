@@ -66,6 +66,14 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+r0*
+software_vt
+aes_test
+des_test
+hmac_test
+rsa_test
+test.csv
+parsec-3.0
 
 # Chutzpah Test files
 _Chutzpah*

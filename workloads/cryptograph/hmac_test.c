@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <openssl/hmac.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #define HMAC_ITER 4096 * 4096
  
@@ -16,12 +20,21 @@ int main()
     unsigned char* digest;
     int i = 0;
    
-    while (i < HMAC_ITER) { 
-        // Using sha1 hash engine here.
-        // You may use other hash engines. e.g EVP_md5(), EVP_sha224, EVP_sha512, etc
-        digest = HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, strlen(data),
+    pid_t pid = fork();
+    if (pid == 0) {
+        static char *argv[] = {"", NULL};
+        execv("./software_vt", argv);
+        exit(127);
+    } else {
+
+        while (i < HMAC_ITER) { 
+            // Using sha1 hash engine here.
+            // You may use other hash engines. e.g EVP_md5(), EVP_sha224, EVP_sha512, etc
+            digest = HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, strlen(data),
                       NULL, NULL);
-        i++;
+            i++;
+        }
+        waitpid(pid, 0, 0);
     }
  
     // Be careful of the length of string with the choosen hash engine. SHA1 

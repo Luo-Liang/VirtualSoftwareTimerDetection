@@ -6,6 +6,10 @@
 #include <openssl/err.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #define KEY_LENGTH  2048
 #define PUB_EXP     3
@@ -58,6 +62,13 @@ int main(void) {
     //printf("Message to encrypt: ");
     //fgets(msg, KEY_LENGTH-1, stdin);
     //msg[strlen(msg)-1] = '\0';
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        static char *argv[] = {"", NULL};
+        execv("./software_vt", argv);
+        exit(127);
+    } else {
 
     // Encrypt the message
     encrypt = malloc(RSA_size(keypair));
@@ -113,6 +124,8 @@ free_stuff:
     free(decrypt);
     free(err);
 
+        waitpid(pid, 0, 0);
+    }
     return 0;
 }
 

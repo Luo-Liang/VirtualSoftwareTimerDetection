@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <openssl/des.h>
 #include <openssl/rand.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
  
 #define BUFSIZE  64
 #define DES_ITER 4096 * 4096
@@ -28,21 +31,30 @@ int main(void)
     DES_random_key(&key);
     DES_set_key((C_Block *)key, &keysched);
  
-    /* 8 bytes of plaintext */
-    strcpy(in, "CSE564ML");
-    printf("Plaintext: [%s]\n", in);
+    pid_t pid = fork();
+    if (pid == 0) {
+        static char *argv[] = {"", NULL};
+        execv("./software_vt", argv);
+        exit(127);
+    } else {
+        /* 8 bytes of plaintext */
+        strcpy(in, "CSE564ML");
+        printf("Plaintext: [%s]\n", in);
 
-    for (i = 0; i < DES_ITER; i++) 
-        DES_ecb_encrypt((C_Block *)in,(C_Block *)out, &keysched, DES_ENCRYPT);
+        for (i = 0; i < DES_ITER; i++) 
+            DES_ecb_encrypt((C_Block *)in,(C_Block *)out, &keysched, DES_ENCRYPT);
  
-    printf("Ciphertext:");
-    while (*e) printf(" [%02x]", *e++);
-    printf("\n");
+        printf("Ciphertext:");
+        while (*e) printf(" [%02x]", *e++);
+        printf("\n");
  
-    for (i = 0; i < DES_ITER; i++) 
-        DES_ecb_encrypt((C_Block *)out,(C_Block *)back, &keysched, DES_DECRYPT);
+        for (i = 0; i < DES_ITER; i++) 
+            DES_ecb_encrypt((C_Block *)out,(C_Block *)back, &keysched, DES_DECRYPT);
  
-    printf("Decrypted Text: [%s]\n", back);
+        printf("Decrypted Text: [%s]\n", back);
+
+        waitpid(pid, 0, 0);
+    }
  
     return(0);
 }
